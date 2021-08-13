@@ -58,18 +58,79 @@ survey%>%
 survey_IT_au<-survey%>%
   filter(country=="Australia" | country=="australia"|country=="Australi")%>%
   filter(industry=="Computing or Tech" & annual_salary>80000)
+survey%>%
+  filter(gender!="Man")
+
 ```
 
 
 #### Sellecting 
 
+#### 'mutate' vs "transmute'
+
+```{r}
+
+class(survey_IT_au$annual_salary)
+
+survey_IT_au<-survey_IT_au%>%
+  mutate(avr_salary=mean(annual_salary))
+
+survey_IT_au%>%
+  mutate(max_salary=max(annual_salary))
+```
+
+
+
 ```{r}
 survey_IT_au %>%
   select(how_old_are_you, job_title, annual_salary)%>%
-  arrange(annual_salary)
+  arrange(annual_salary) ## arrange(desc()) for descending
 survey_IT_au %>%
   select(-industry)
+survey_IT_au%>%add_count(gender, industry, sort = TRUE)
+survey_IT_au%>%
+  count(gender, industry, sort = TRUE)
+
+survey_IT_au%>%
+  distinct(how_old_are_you)
+
+survey_IT_au_grouped<-survey_IT_au%>%group_by(city)
+
+survey_IT_au%>%
+  summarise(min_salary=min(annual_salary))
+
+
 ```
+
+
+
+
+```{r}
+survey_IT_au%>%
+  group_by(gender, city)%>%
+  summarise(min_salary=min(annual_salary))%>%
+  arrange(desc(min_salary))%>%
+  ungroup()
+
+survey_IT_au%>%
+  mutate(age=parse_number(how_old_are_you))
+
+survey_IT_au%>%
+  mutate(age=parse_number(overall_years_of_professional_experience))
+
+survey_IT_au%>%
+  mutate(interest=case_when(job_title=="Business Analyst" ~ "Yes", T ~ "No"))
+```
+
+```{r}
+survey%>%
+  count(industry, sort = TRUE)
+
+
+survey%>%
+  distinct(industry)
+```
+
 
 
 
